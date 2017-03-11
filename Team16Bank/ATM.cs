@@ -24,30 +24,21 @@ namespace Team16Bank
         {
             int horizotal = 28;
             int vertical = 271;
-            int fileNumber = 1;
+            int horizotal2 = 12;
+            int vertical2 = 40;
+            int fileNumber = 0;
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
 
-                     Image image = Image.FromFile(@"keyPadButtons\key"+ fileNumber +".png");
-                    //if(fileNumber==12 || fileNumber==4 || fileNumber ==8 || fileNumber==16) image.
-                    keyPadButtons[i, j] = new PictureBox();
-                    keyPadButtons[i, j].Size = new Size(32, 25);
-                    keyPadButtons[i, j].Location = new Point(horizotal, vertical);
-                    keyPadButtons[i, j].Tag = new TagInfo { name = "screenButton", value = 0 };
+                   Image image = Image.FromFile(@"keyPadButtons\key"+ fileNumber +".png");
+                   keyPadButtons[i, j] = new PictureBox();
+                   keyPadButtons[i, j].Size = new Size(32, 25);
+                   keyPadButtons[i, j].Location = new Point(horizotal, vertical);
+                   keyPadButtons[i, j].Tag = new TagInfo { name = "keyPadButton", value = 0 };
                    keyPadButtons[i, j].Image = image;
-                    //keyPadButtons[i, j].BackColor = Color.Transparent;
 
-                    /*screenButtons[i,j].BackColor = System.Drawing.Color.Transparent;
-                    screenButtons[i, j].BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-                    screenButtons[i, j].Image = image;
-                    screenButtons[i, j].Location = new System.Drawing.Point(horizotal, vertical);
-                    screenButtons[i, j].Name = "pictureBox1";
-                    screenButtons[i, j].Size = new System.Drawing.Size(52, 40);
-                    screenButtons[i, j].TabIndex = 0;
-                    screenButtons[i, j].TabStop = false;
-                    screenButtons[i, j].Click += new System.EventHandler(screenButtonsClick);*/
                     if ((j + 1) % 4 == 0)
                     {
                         vertical += 30;
@@ -73,6 +64,35 @@ namespace Team16Bank
             keyPadButtons[2, 3].Size = new Size(37, 25);
             keyPadButtons[3, 3].SizeMode = PictureBoxSizeMode.StretchImage;
             keyPadButtons[3, 3].Size = new Size(37, 25);
+
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    if (j == 1)
+                    {
+                        horizotal2 = 400;
+                    }
+                    else
+                    {
+                        horizotal2 = 12;
+                    }
+                    Image sideButton = Image.FromFile(@"keyPadButtons\screenSideButton" + j + ".png");
+                    screenButtons[i, j] = new PictureBox();
+                    screenButtons[i, j].Size = new Size(25, 17);
+                    screenButtons[i, j].Location = new Point(horizotal2, vertical2);
+                    screenButtons[i, j].Tag = new TagInfo { name = "screenButton", value = 0 };
+                    screenButtons[i, j].Image = sideButton;
+
+                   
+
+                    screenButtons[i, j].Show();
+                    this.Controls.Add(screenButtons[i, j]);
+                    this.Controls.SetChildIndex(screenButtons[i, j], 0);
+                    screenButtons[i, j].Click += new EventHandler(screenButtonsClick);
+                }
+                vertical2 += 50;
+            }
         }
         private void screenButtonsClick(object sender, EventArgs e)
         {

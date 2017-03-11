@@ -63,6 +63,16 @@ namespace Team16Bank.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ATMkeyPad {
+            get {
+                object obj = ResourceManager.GetObject("ATMkeyPad", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap banklogo {
             get {
                 object obj = ResourceManager.GetObject("banklogo", resourceCulture);

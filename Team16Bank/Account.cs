@@ -8,7 +8,7 @@ namespace Team16Bank
 {
     class Account
     {
-        //the attributes for the account
+         //the attributes for the account
         private int balance;
         private int pin;
         private int accountNum;
@@ -71,14 +71,14 @@ namespace Team16Bank
                 return false;
             }
         }
-        public void changePin(int newPin)
-        {
-            pin = newPin;
-        }
         public int getAccountNum()
         {
             return accountNum;
         }
 
     }
-}
+    }
+
+
+
+
