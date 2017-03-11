@@ -8,3 +8,6 @@ C:\Users\pauliuskuzmickas\Documents\Visual Studio 2013\Projects\Team16Bank\Team1
 C:\Users\pauliuskuzmickas\Documents\Visual Studio 2013\Projects\Team16Bank\Team16Bank\obj\Debug\Team16Bank.csproj.GenerateResource.Cache
 C:\Users\pauliuskuzmickas\Documents\Visual Studio 2013\Projects\Team16Bank\Team16Bank\obj\Debug\Team16Bank.exe
 C:\Users\pauliuskuzmickas\Documents\Visual Studio 2013\Projects\Team16Bank\Team16Bank\obj\Debug\Team16Bank.pdb
+U:\RoyalDundonianBank\Team16Bank\bin\Debug\Team16Bank.exe.config
+U:\RoyalDundonianBank\Team16Bank\obj\Debug\Team16Bank.exe
+U:\RoyalDundonianBank\Team16Bank\obj\Debug\Team16Bank.pdb
