@@ -21,6 +21,7 @@ namespace Team16Bank
         public Form1()
         {
             InitializeComponent();
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             loggingThread = new Thread(updateLog);
             loggingThread.Start();
             ac[0] = new Account(300, 1111, 111111);
@@ -32,7 +33,7 @@ namespace Team16Bank
         {
             atmsInUse++;
             label5.Text = atmsInUse.ToString();
-            new ATM().Show();
+            new ATM(ac).Show();
             
         }
 
