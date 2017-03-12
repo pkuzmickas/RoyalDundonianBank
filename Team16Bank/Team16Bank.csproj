@@ -94,6 +94,18 @@
   <ItemGroup>
     <None Include="Resources\ATMkeyPad.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\keyPadButtons\screenSideButton0Pressed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\keyPadButtons\screenSideButton1Pressed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\keyPadButtons\nocash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\keyPadButtons\noend.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

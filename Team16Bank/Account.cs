@@ -8,7 +8,7 @@ namespace Team16Bank
 {
     public class Account
     {
-         //the attributes for the account
+        //the attributes for the account
         private int balance;
         private int pin;
         private int accountNum;
@@ -75,9 +75,13 @@ namespace Team16Bank
         {
             return accountNum;
         }
+        public void setPin(int newPin)
+        {
+            pin = newPin;
+        }
 
     }
-    }
+}
 
 
 
