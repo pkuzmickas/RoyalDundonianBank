@@ -27,10 +27,13 @@ namespace Team16Bank
         private int cashNumber = 0;
         private int receiptNumber = 1;
         bool receiptNeeded = false;
+        Form1 bank;
 
-        public ATM(Account[] ac)
+        public ATM(Account[] ac, Form1 mainBank, string name)
         {
             InitializeComponent();
+            bank = mainBank;
+            this.Text = "ATM" + name;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.ac = ac;
             for (int i = 0; i < 16; i++)
@@ -327,6 +330,7 @@ namespace Team16Bank
                             timer.Elapsed += new System.Timers.ElapsedEventHandler(showNewPinScreen);
                             timer.Enabled = true;
                             
+                            
                         }
                         else
                         {
@@ -431,6 +435,8 @@ namespace Team16Bank
                             System.Timers.Timer timer = new System.Timers.Timer(500);
                             timer.Elapsed += new System.Timers.ElapsedEventHandler(showMainScreen);
                             timer.Enabled = true;
+                            controlsEnabled = false;
+                            bank.logInfo(this.Text + ": Successful login for account: " + accnumber.Text);
                         }
                         else
                         {
@@ -443,7 +449,7 @@ namespace Team16Bank
                             else
                             {
                                 errorlabel.Text = "INCORRECT! CARD EJECTED!";
-
+                                bank.logInfo(this.Text + ": Pin rejected for account: " + accnumber.Text);
                                 System.Timers.Timer timer = new System.Timers.Timer(1500);
                                 timer.Elapsed += new System.Timers.ElapsedEventHandler(returnToMainScreen);
                                 timer.Enabled = true;
@@ -463,6 +469,7 @@ namespace Team16Bank
             {
                 pinpanel.Visible = false;
                 mainpanel.Visible = true;
+                controlsEnabled = true;
                 pinlabel.Text = "";
                 pinEntered = "";
                 retriesRemaining = 3;
@@ -686,6 +693,12 @@ namespace Team16Bank
         {
             pictureBox4.BackgroundImage = Properties.Resources.noend;
 
+        }
+
+        private void ATM_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            
+            bank.turnOffATM();
         }
 
     }

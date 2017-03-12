@@ -13,17 +13,16 @@ namespace Team16Bank
 {
     public partial class Form1 : Form
     {
-        int atmsInUse = 0;
-        Thread loggingThread;
-        bool running = true;
+        private int atmsAvailable = 537;
+        private int atmsInUse = 0;
         private Account[] ac = new Account[3];
+        List<Thread> threadList = new List<Thread>();
 
         public Form1()
         {
             InitializeComponent();
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            loggingThread = new Thread(updateLog);
-            loggingThread.Start();
+            availableLabel.Text = atmsAvailable.ToString();
             ac[0] = new Account(300, 1111, 111111);
             ac[1] = new Account(750, 2222, 222222);
             ac[2] = new Account(3000, 3333, 333333);
@@ -32,23 +31,60 @@ namespace Team16Bank
         private void button1_Click(object sender, EventArgs e)
         {
             atmsInUse++;
-            label5.Text = atmsInUse.ToString();
-            new ATM(ac).Show();
+            atmsAvailable--;
+            availableLabel.Text = atmsAvailable.ToString();
+            atmslabel.Text = atmsInUse.ToString();
+            Thread newThread = new Thread(() =>
+            {
+                Application.Run(new ATM(ac, this, atmsInUse.ToString()));
+                
+            });
+            newThread.Start();
+            threadList.Add(newThread);
             
         }
 
-        void updateLog()
-        {
-            while (running)
-            {
-                
-                //updatelog
-            }
-        }
+
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            running = false;
+            foreach (Thread t in threadList)
+            {
+                t.Abort();
+            }
+        }
+
+        public void turnOffATM()
+        {
+            atmsInUse--;
+            atmsAvailable++;
+            
+            atmslabel.Invoke(new MethodInvoker(delegate
+            {
+                availableLabel.Text = atmsAvailable.ToString();
+                atmslabel.Text = atmsInUse.ToString();
+            }));
+            
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+        }
+
+        public void logInfo(string text)
+        {
+            log.Invoke(new MethodInvoker(delegate
+            {
+                if (log.Text == "Listening for events...")
+                {
+                    log.Text = text;
+                }
+                else
+                {
+                    log.Text += "\r\n" + text;
+                }
+            }));
+            
         }
     }
 }

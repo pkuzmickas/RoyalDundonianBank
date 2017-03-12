@@ -891,6 +891,7 @@
             this.MaximizeBox = false;
             this.Name = "ATM";
             this.Text = "ATM";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ATM_FormClosed);
             this.Load += new System.EventHandler(this.ATM_Load);
             this.panel1.ResumeLayout(false);
             this.EndCash.ResumeLayout(false);
