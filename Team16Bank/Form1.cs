@@ -36,12 +36,12 @@ namespace Team16Bank
             atmslabel.Text = atmsInUse.ToString();
             Thread newThread = new Thread(() =>
             {
-                Application.Run(new ATM(ac, this, atmsInUse.ToString()));
-                
+                Application.Run(new ATM(ac, this, atmsInUse.ToString(), false, true));
+
             });
             newThread.Start();
             threadList.Add(newThread);
-            
+
         }
 
 
@@ -58,13 +58,13 @@ namespace Team16Bank
         {
             atmsInUse--;
             atmsAvailable++;
-            
+
             atmslabel.Invoke(new MethodInvoker(delegate
             {
                 availableLabel.Text = atmsAvailable.ToString();
                 atmslabel.Text = atmsInUse.ToString();
             }));
-            
+
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -84,7 +84,27 @@ namespace Team16Bank
                     log.Text += "\r\n" + text;
                 }
             }));
-            
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            atmsInUse += 2;
+            atmsAvailable -= 2;
+            availableLabel.Text = atmsAvailable.ToString();
+            atmslabel.Text = atmsInUse.ToString();
+            Thread newThread = new Thread(() =>
+            {
+                Application.Run(new ATM(ac, this, (atmsInUse - 1).ToString(), true, false));
+            });
+            newThread.Start();
+            threadList.Add(newThread);
+            Thread newThread2 = new Thread(() =>
+             {
+                 Application.Run(new ATM(ac, this, atmsInUse.ToString(), true, false));
+             });
+            newThread2.Start();
+            threadList.Add(newThread2);
         }
     }
 }

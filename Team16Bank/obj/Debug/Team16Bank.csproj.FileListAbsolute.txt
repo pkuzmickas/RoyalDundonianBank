@@ -18,3 +18,13 @@ U:\RoyalDundonianBank\Team16Bank\obj\Debug\Team16Bank.Properties.Resources.resou
 U:\RoyalDundonianBank\Team16Bank\obj\Debug\Team16Bank.csproj.GenerateResource.Cache
 U:\RoyalDundonianBank\Team16Bank\bin\Debug\Team16Bank.exe
 U:\RoyalDundonianBank\Team16Bank\bin\Debug\Team16Bank.pdb
+C:\Users\PKuzmickas\Desktop\Programming\uni\ATM\RoyalDundonianBank\Team16Bank\bin\Debug\Team16Bank.exe.config
+C:\Users\PKuzmickas\Desktop\Programming\uni\ATM\RoyalDundonianBank\Team16Bank\obj\Debug\Team16Bank.exe
+C:\Users\PKuzmickas\Desktop\Programming\uni\ATM\RoyalDundonianBank\Team16Bank\obj\Debug\Team16Bank.pdb
+C:\Users\PKuzmickas\Desktop\Programming\uni\ATM\RoyalDundonianBank\Team16Bank\bin\Debug\Team16Bank.exe
+C:\Users\PKuzmickas\Desktop\Programming\uni\ATM\RoyalDundonianBank\Team16Bank\bin\Debug\Team16Bank.pdb
+C:\Users\PKuzmickas\Desktop\Programming\uni\ATM\RoyalDundonianBank\Team16Bank\obj\Debug\Team16Bank.csprojResolveAssemblyReference.cache
+C:\Users\PKuzmickas\Desktop\Programming\uni\ATM\RoyalDundonianBank\Team16Bank\obj\Debug\Team16Bank.ATM.resources
+C:\Users\PKuzmickas\Desktop\Programming\uni\ATM\RoyalDundonianBank\Team16Bank\obj\Debug\Team16Bank.Form1.resources
+C:\Users\PKuzmickas\Desktop\Programming\uni\ATM\RoyalDundonianBank\Team16Bank\obj\Debug\Team16Bank.Properties.Resources.resources
+C:\Users\PKuzmickas\Desktop\Programming\uni\ATM\RoyalDundonianBank\Team16Bank\obj\Debug\Team16Bank.csproj.GenerateResource.Cache

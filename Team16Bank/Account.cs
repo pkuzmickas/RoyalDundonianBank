@@ -12,7 +12,7 @@ namespace Team16Bank
         private int balance;
         private int pin;
         private int accountNum;
-
+        public bool simulationStarted = false;
         // a constructor that takes initial values for each of the attributes (balance, pin, accountNumber)
         public Account(int balance, int pin, int accountNum)
         {
@@ -42,7 +42,7 @@ namespace Team16Bank
          */
         public Boolean decrementBalance(int amount)
         {
-            if (this.balance > amount)
+            if (this.balance >= amount)
             {
                 balance -= amount;
                 return true;

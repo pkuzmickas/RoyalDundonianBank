@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace Team16Bank
 {
@@ -28,10 +29,14 @@ namespace Team16Bank
         private int receiptNumber = 1;
         bool receiptNeeded = false;
         Form1 bank;
+        bool isFixed = true, isSimulation = false;
+        public bool simulating = false;
 
-        public ATM(Account[] ac, Form1 mainBank, string name)
+        public ATM(Account[] ac, Form1 mainBank, string name, bool isSimulation, bool isFixed)
         {
             InitializeComponent();
+            this.isFixed = isFixed;
+            this.isSimulation = isSimulation;
             bank = mainBank;
             this.Text = "ATM" + name;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -46,10 +51,10 @@ namespace Team16Bank
                 }
                 if (i < 6)
                 {
-                    receiptOutIMG[i] = Image.FromFile(@"keyPadButtons\end" + (i+1) + ".png");
+                    receiptOutIMG[i] = Image.FromFile(@"keyPadButtons\end" + (i + 1) + ".png");
                 }
             }
-            
+
             keysPressed[16] = Properties.Resources.screenSideButton0Pressed;
             keysPressed[17] = Properties.Resources.screenSideButton1Pressed;
             keysReleased[16] = Image.FromFile(@"keyPadButtons\screenSideButton0.png");
@@ -197,22 +202,37 @@ namespace Team16Bank
                     {
                         if (currentAccount.getBalance() >= cashToTakeAmount)
                         {
-                            currentAccount.decrementBalance(cashToTakeAmount);
-                            cashOutAnimation();
-                            if (receiptNeeded) receiptOutAnimation();
-                            EndCash.Visible = true;
-                            cashpanel.Visible = false;
-                            
+                            if (!isSimulation)
+                            {
+                                currentAccount.decrementBalance(cashToTakeAmount);
+                                cashOutAnimation();
+                                if (receiptNeeded) receiptOutAnimation();
+                                EndCash.Visible = true;
+                                cashpanel.Visible = false;
+                            }
+                            else
+                            {
+                                cashpanel.Visible = false;
+                                badsimulationpanel.Visible = true;
+                                System.Timers.Timer t = new System.Timers.Timer(1500);
+                                t.Elapsed += (sender1, ev) => sleepTest(sender1, ev, cashToTakeAmount);
+                                t.Enabled = true;
+
+                            }
+
                         }
                         else
                         {
                             EndCashBad.Visible = true;
                             cashpanel.Visible = false;
-                            
+
                         }
-                        System.Timers.Timer timer = new System.Timers.Timer(2500);
-                        timer.Elapsed += new System.Timers.ElapsedEventHandler(returnToMainScreen);
-                        timer.Enabled = true;
+                        if (!isSimulation)
+                        {
+                            System.Timers.Timer timer = new System.Timers.Timer(2500);
+                            timer.Elapsed += new System.Timers.ElapsedEventHandler(returnToMainScreen);
+                            timer.Enabled = true;
+                        }
                     }
                 }
 
@@ -288,7 +308,50 @@ namespace Team16Bank
                 }
             }
         }
-        
+
+        private void sleepTest(object sender, EventArgs e, int cashToTakeAmount)
+        {
+            if (!simulating)
+            {
+                if (!currentAccount.simulationStarted)
+                {
+                    currentAccount.simulationStarted = true;
+                    simulating = true;
+                }
+                else
+                {
+                    currentAccount.simulationStarted = false;
+                }
+            } else if(simulating && currentAccount.simulationStarted)
+            {
+                Thread.Sleep(500);
+            }
+            if (!currentAccount.simulationStarted)
+            {
+                int tempBalance = currentAccount.getBalance();
+                Thread.Sleep(500);
+                tempBalance -= cashToTakeAmount;
+                Thread.Sleep(500);
+                currentAccount.setBalance(tempBalance); 
+                simulatingpanel.Invoke(new MethodInvoker(delegate
+                {
+                    simulatingpanel.Visible = true;
+                    badsimulationpanel.Visible = false;
+                    simulating = false;
+                    
+                    Console.WriteLine(this.Text + ": " + currentAccount.getBalance());
+                    cashOutAnimation();
+                    if (receiptNeeded) receiptOutAnimation();
+                    System.Timers.Timer timer = new System.Timers.Timer(5000);
+                    timer.Elapsed += new System.Timers.ElapsedEventHandler(returnToMainScreen);
+                    timer.Enabled = true;
+                    
+                }));
+                ((System.Timers.Timer)sender).Enabled = false;
+            }
+            
+            
+        }
 
         private void keypadButtonsDown(object sender, EventArgs e)
         {
@@ -329,8 +392,8 @@ namespace Team16Bank
                             System.Timers.Timer timer = new System.Timers.Timer(500);
                             timer.Elapsed += new System.Timers.ElapsedEventHandler(showNewPinScreen);
                             timer.Enabled = true;
-                            
-                            
+
+
                         }
                         else
                         {
@@ -391,7 +454,7 @@ namespace Team16Bank
                                 if (receiptNeeded) receiptOutAnimation();
                                 EndCash.Visible = true;
                                 othercashpanel.Visible = false;
-                                
+
                             }
                             else
                             {
@@ -415,9 +478,9 @@ namespace Team16Bank
                 }
                 else if (pinpanel.Visible == true && retriesRemaining > 0)
                 {
-                    if (pinlabel.Text != "****" && TI.value>=0 && TI.value<=9)
+                    if (pinlabel.Text != "****" && TI.value >= 0 && TI.value <= 9)
                     {
-                        
+
                         pinlabel.Text += "*";
                         pinEntered += TI.value.ToString();
                     }
@@ -516,6 +579,7 @@ namespace Team16Bank
                     errorlabel.Visible = false;
                     errorpinlabel.Visible = false;
                     successlabel.Visible = false;
+                    simulatingpanel.Visible = false;
                     cashamountlabel.Text = "";
                     newpinlabel.Text = "";
                     currentpinlabel.Text = "";
@@ -542,7 +606,7 @@ namespace Team16Bank
 
         private void cashOutAnimation()
         {
-            Timer timer = new Timer();
+            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Interval = 50;
             timer.Tick += new EventHandler(cashAnimation);
             timer.Start();
@@ -552,7 +616,7 @@ namespace Team16Bank
 
         private void receiptOutAnimation()
         {
-            Timer timer = new Timer();
+            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Interval = 100;
             timer.Tick += new EventHandler(receiptAnimation);
             timer.Start();
@@ -562,9 +626,9 @@ namespace Team16Bank
 
         private void cashAnimation(object sender, System.EventArgs e)
         {
-            var timer = (Timer)sender;
+            var timer = (System.Windows.Forms.Timer)sender;
             Image image = cashOutIMG[cashNumber];
-            
+
             pictureBox3.BackgroundImage = image;
             cashNumber++;
             if (cashNumber == 7)
@@ -575,8 +639,8 @@ namespace Team16Bank
         }
         private void receiptAnimation(object sender, System.EventArgs e)
         {
-            var timer = (Timer)sender;
-            Image image = receiptOutIMG[receiptNumber-1];
+            var timer = (System.Windows.Forms.Timer)sender;
+            Image image = receiptOutIMG[receiptNumber - 1];
             pictureBox4.BackgroundImage = image;
             receiptNumber++;
             if (receiptNumber == 6)
@@ -584,7 +648,7 @@ namespace Team16Bank
                 receiptNumber = 1;
                 timer.Stop();
             }
-        }    
+        }
 
 
         private int getImageNumber(int TIValue)
@@ -695,9 +759,14 @@ namespace Team16Bank
 
         }
 
+        private void label43_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void ATM_FormClosed(object sender, FormClosedEventArgs e)
         {
-            
+
             bank.turnOffATM();
         }
 
