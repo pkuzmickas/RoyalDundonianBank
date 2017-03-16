@@ -17,6 +17,7 @@ namespace Team16Bank
         private int atmsInUse = 0;
         private Account[] ac = new Account[3];
         List<Thread> threadList = new List<Thread>();
+        public static Semaphore semaphore;
 
         public Form1()
         {
@@ -26,6 +27,7 @@ namespace Team16Bank
             ac[0] = new Account(300, 1111, 111111);
             ac[1] = new Account(750, 2222, 222222);
             ac[2] = new Account(3000, 3333, 333333);
+            semaphore = new Semaphore(1, 1);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -106,5 +108,28 @@ namespace Team16Bank
             newThread2.Start();
             threadList.Add(newThread2);
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            atmsInUse += 2;
+            atmsAvailable -= 2;
+            availableLabel.Text = atmsAvailable.ToString();
+            atmslabel.Text = atmsInUse.ToString();
+            Thread newThread = new Thread(() =>
+            {
+                Application.Run(new ATM(ac, this, (atmsInUse - 1).ToString(), true, true));
+            });
+            newThread.Start();
+            threadList.Add(newThread);
+            Thread newThread2 = new Thread(() =>
+            {
+                Application.Run(new ATM(ac, this, atmsInUse.ToString(), true, true));
+            });
+            newThread2.Start();
+            threadList.Add(newThread2);
+        }
+
+        
     }
+    
 }

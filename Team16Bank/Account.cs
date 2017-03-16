@@ -13,6 +13,7 @@ namespace Team16Bank
         private int pin;
         private int accountNum;
         public bool simulationStarted = false;
+        public bool simulation2Started = false;
         // a constructor that takes initial values for each of the attributes (balance, pin, accountNumber)
         public Account(int balance, int pin, int accountNum)
         {

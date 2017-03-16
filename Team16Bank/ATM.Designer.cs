@@ -29,6 +29,14 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.takemoneypanel = new System.Windows.Forms.Panel();
+            this.label45 = new System.Windows.Forms.Label();
+            this.simulatingpanel = new System.Windows.Forms.Panel();
+            this.label44 = new System.Windows.Forms.Label();
+            this.goodsimulationpanel = new System.Windows.Forms.Panel();
+            this.label43 = new System.Windows.Forms.Label();
+            this.badsimulationpanel = new System.Windows.Forms.Panel();
+            this.label39 = new System.Windows.Forms.Label();
             this.EndCash = new System.Windows.Forms.Panel();
             this.label26 = new System.Windows.Forms.Label();
             this.EndSesh = new System.Windows.Forms.Panel();
@@ -97,13 +105,12 @@
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.badsimulationpanel = new System.Windows.Forms.Panel();
-            this.label39 = new System.Windows.Forms.Label();
-            this.goodsimulationpanel = new System.Windows.Forms.Panel();
-            this.label43 = new System.Windows.Forms.Label();
-            this.simulatingpanel = new System.Windows.Forms.Panel();
-            this.label44 = new System.Windows.Forms.Label();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
+            this.takemoneypanel.SuspendLayout();
+            this.simulatingpanel.SuspendLayout();
+            this.goodsimulationpanel.SuspendLayout();
+            this.badsimulationpanel.SuspendLayout();
             this.EndCash.SuspendLayout();
             this.EndSesh.SuspendLayout();
             this.EndCashBad.SuspendLayout();
@@ -119,14 +126,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.badsimulationpanel.SuspendLayout();
-            this.goodsimulationpanel.SuspendLayout();
-            this.simulatingpanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Blue;
+            this.panel1.Controls.Add(this.takemoneypanel);
             this.panel1.Controls.Add(this.simulatingpanel);
             this.panel1.Controls.Add(this.goodsimulationpanel);
             this.panel1.Controls.Add(this.badsimulationpanel);
@@ -145,6 +151,98 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(338, 215);
             this.panel1.TabIndex = 1;
+            // 
+            // takemoneypanel
+            // 
+            this.takemoneypanel.BackColor = System.Drawing.Color.Blue;
+            this.takemoneypanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.takemoneypanel.Controls.Add(this.label45);
+            this.takemoneypanel.Location = new System.Drawing.Point(0, 0);
+            this.takemoneypanel.Name = "takemoneypanel";
+            this.takemoneypanel.Size = new System.Drawing.Size(338, 215);
+            this.takemoneypanel.TabIndex = 7;
+            this.takemoneypanel.Visible = false;
+            // 
+            // label45
+            // 
+            this.label45.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label45.ForeColor = System.Drawing.Color.White;
+            this.label45.Location = new System.Drawing.Point(42, 30);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(262, 140);
+            this.label45.TabIndex = 0;
+            this.label45.Text = "Don\'t forget to take your cash!";
+            this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // simulatingpanel
+            // 
+            this.simulatingpanel.BackColor = System.Drawing.Color.Blue;
+            this.simulatingpanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.simulatingpanel.Controls.Add(this.label44);
+            this.simulatingpanel.Location = new System.Drawing.Point(0, 0);
+            this.simulatingpanel.Name = "simulatingpanel";
+            this.simulatingpanel.Size = new System.Drawing.Size(338, 215);
+            this.simulatingpanel.TabIndex = 6;
+            this.simulatingpanel.Visible = false;
+            // 
+            // label44
+            // 
+            this.label44.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label44.ForeColor = System.Drawing.Color.White;
+            this.label44.Location = new System.Drawing.Point(42, 30);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(262, 140);
+            this.label44.TabIndex = 0;
+            this.label44.Text = "Withdrawing money Please check your balance in either the bank Log or the GUI to " +
+    "complete the simulation";
+            this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // goodsimulationpanel
+            // 
+            this.goodsimulationpanel.BackColor = System.Drawing.Color.Blue;
+            this.goodsimulationpanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.goodsimulationpanel.Controls.Add(this.label43);
+            this.goodsimulationpanel.Location = new System.Drawing.Point(0, 0);
+            this.goodsimulationpanel.Name = "goodsimulationpanel";
+            this.goodsimulationpanel.Size = new System.Drawing.Size(338, 215);
+            this.goodsimulationpanel.TabIndex = 5;
+            this.goodsimulationpanel.Visible = false;
+            // 
+            // label43
+            // 
+            this.label43.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label43.ForeColor = System.Drawing.Color.White;
+            this.label43.Location = new System.Drawing.Point(25, 30);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(293, 140);
+            this.label43.TabIndex = 0;
+            this.label43.Text = "To simulate a cash withdrawal with semaphores this thread has been put to sleep u" +
+    "ntil you withdraw money from a different ATM";
+            this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label43.Click += new System.EventHandler(this.label43_Click);
+            // 
+            // badsimulationpanel
+            // 
+            this.badsimulationpanel.BackColor = System.Drawing.Color.Blue;
+            this.badsimulationpanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.badsimulationpanel.Controls.Add(this.label39);
+            this.badsimulationpanel.Location = new System.Drawing.Point(0, 0);
+            this.badsimulationpanel.Name = "badsimulationpanel";
+            this.badsimulationpanel.Size = new System.Drawing.Size(338, 215);
+            this.badsimulationpanel.TabIndex = 4;
+            this.badsimulationpanel.Visible = false;
+            // 
+            // label39
+            // 
+            this.label39.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label39.ForeColor = System.Drawing.Color.White;
+            this.label39.Location = new System.Drawing.Point(40, 50);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(262, 120);
+            this.label39.TabIndex = 0;
+            this.label39.Text = "To simulate a broken cash withdrawal this thread has been put to sleep until you " +
+    "withdraw money from a different ATM";
+            this.label39.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // EndCash
             // 
@@ -868,7 +966,7 @@
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox3.BackgroundImage = global::Team16Bank.Properties.Resources.nocash;
-            this.pictureBox3.Location = new System.Drawing.Point(210, 243);
+            this.pictureBox3.Location = new System.Drawing.Point(202, 243);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(143, 49);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -886,96 +984,40 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // badsimulationpanel
+            // pictureBox5
             // 
-            this.badsimulationpanel.BackColor = System.Drawing.Color.Blue;
-            this.badsimulationpanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.badsimulationpanel.Controls.Add(this.label39);
-            this.badsimulationpanel.Location = new System.Drawing.Point(0, 0);
-            this.badsimulationpanel.Name = "badsimulationpanel";
-            this.badsimulationpanel.Size = new System.Drawing.Size(338, 215);
-            this.badsimulationpanel.TabIndex = 4;
-            this.badsimulationpanel.Visible = false;
-            // 
-            // label39
-            // 
-            this.label39.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label39.ForeColor = System.Drawing.Color.White;
-            this.label39.Location = new System.Drawing.Point(40, 50);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(262, 120);
-            this.label39.TabIndex = 0;
-            this.label39.Text = "To simulate a broken cash withdrawal this thread has been put to sleep until you " +
-    "withdraw money from a different ATM";
-            this.label39.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // goodsimulationpanel
-            // 
-            this.goodsimulationpanel.BackColor = System.Drawing.Color.Blue;
-            this.goodsimulationpanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.goodsimulationpanel.Controls.Add(this.label43);
-            this.goodsimulationpanel.Location = new System.Drawing.Point(0, 0);
-            this.goodsimulationpanel.Name = "goodsimulationpanel";
-            this.goodsimulationpanel.Size = new System.Drawing.Size(338, 215);
-            this.goodsimulationpanel.TabIndex = 5;
-            this.goodsimulationpanel.Visible = false;
-            // 
-            // label43
-            // 
-            this.label43.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label43.ForeColor = System.Drawing.Color.White;
-            this.label43.Location = new System.Drawing.Point(25, 30);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(293, 140);
-            this.label43.TabIndex = 0;
-            this.label43.Text = "To simulate a cash withdrawal with semaphores this thread has been put to sleep u" +
-    "ntil you withdraw money from a different ATM";
-            this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label43.Click += new System.EventHandler(this.label43_Click);
-            // 
-            // simulatingpanel
-            // 
-            this.simulatingpanel.BackColor = System.Drawing.Color.Blue;
-            this.simulatingpanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.simulatingpanel.Controls.Add(this.label44);
-            this.simulatingpanel.Location = new System.Drawing.Point(0, 0);
-            this.simulatingpanel.Name = "simulatingpanel";
-            this.simulatingpanel.Size = new System.Drawing.Size(338, 215);
-            this.simulatingpanel.TabIndex = 6;
-            this.simulatingpanel.Visible = false;
-            // 
-            // label44
-            // 
-            this.label44.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label44.ForeColor = System.Drawing.Color.White;
-            this.label44.Location = new System.Drawing.Point(42, 30);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(262, 140);
-            this.label44.TabIndex = 0;
-            this.label44.Text = "Withdrawing money Please check your balance in either the bank Log or the GUI to " +
-    "complete the simulation";
-            this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pictureBox5.BackColor = System.Drawing.Color.DimGray;
+            this.pictureBox5.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(432, 250);
+            this.pictureBox5.TabIndex = 14;
+            this.pictureBox5.TabStop = false;
             // 
             // ATM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.DimGray;
+            this.BackColor = System.Drawing.Color.DarkGray;
             this.ClientSize = new System.Drawing.Size(434, 411);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.accnumber);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox4);
-            this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.pictureBox5);
+            this.Controls.Add(this.pictureBox3);
             this.MaximizeBox = false;
             this.Name = "ATM";
             this.Text = "ATM";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ATM_FormClosed);
             this.Load += new System.EventHandler(this.ATM_Load);
             this.panel1.ResumeLayout(false);
+            this.takemoneypanel.ResumeLayout(false);
+            this.simulatingpanel.ResumeLayout(false);
+            this.goodsimulationpanel.ResumeLayout(false);
+            this.badsimulationpanel.ResumeLayout(false);
             this.EndCash.ResumeLayout(false);
             this.EndSesh.ResumeLayout(false);
             this.EndCashBad.ResumeLayout(false);
@@ -991,9 +1033,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.badsimulationpanel.ResumeLayout(false);
-            this.goodsimulationpanel.ResumeLayout(false);
-            this.simulatingpanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1076,5 +1116,8 @@
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.Panel simulatingpanel;
         private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.PictureBox pictureBox5;
+        private System.Windows.Forms.Panel takemoneypanel;
+        private System.Windows.Forms.Label label45;
     }
 }
