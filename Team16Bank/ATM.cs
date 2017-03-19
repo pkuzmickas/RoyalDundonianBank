@@ -13,77 +13,120 @@ namespace Team16Bank
 {
     public partial class ATM : Form
     {
+        //Initialise an array of picture boxes for the screen side buttons
         private PictureBox[,] screenButtons = new PictureBox[4, 2];
+        //Initialise an array of picture boxes for the keypad
         private PictureBox[,] keyPadButtons = new PictureBox[4, 4];
-        private Label account = new Label();
+        //Array of images to store all the images used for the keypad when they are pressed
         Image[] keysPressed = new Image[18];
+        //Array of images to store all the images used for the keypad when they are not pressed
         Image[] keysReleased = new Image[18];
+        //Array of images to store the cash in/out animation
         Image[] cashOutIMG = new Image[8];
+        //Array of images to store the receipt in/out animation
         Image[] receiptOutIMG = new Image[6];
+        //Array of Accounts to store all the available accounts
         Account[] ac;
+        //Account object used to store the account in use
         Account currentAccount;
+        //String variable used to store the entered pin
         string pinEntered;
+        //Bool variable which is used to enable and disable the keypad
         bool controlsEnabled = true;
+        //Int variable used to select the numbers of tries you ahve till the card will be rejected
         int retriesRemaining = 3;
+        //Int variable used to change the image used for the cash out animation
         private int cashNumber = 0;
+        //Int variable used to change the image used for the cash in animation
         private int cashNumberRevers = 6;
+        ////Int variable used to change the image used for the receipt out animation
         private int receiptNumber = 1;
+        //Bool variable used to check if the receipt was requested and also to check if the user took the money,if the user did not take the money they will pulled back in and readded to the balance
         bool receiptNeeded = false, moneyTaken = true;
+        //Object of the main bank system used to interact with the main controll unit
         Form1 bank;
+        //Bool variable used to trigger the semaphore and on to trigger the delays needed to how how we handle the data race
         bool isFixed = true, isSimulation = false;
+        //Bool variable used to know if the delays are applyed at the momment normaly it is true when a cash out request is triggered
         public bool simulating = false;
 
         public ATM(Account[] ac, Form1 mainBank, string name, bool isSimulation, bool isFixed)
         {
+            //Initialiaze all the components created using the ToolBox
             InitializeComponent();
+
             this.isFixed = isFixed;
             this.isSimulation = isSimulation;
+            //Sets the bank object to an instance of the main bank computer
             bank = mainBank;
+            //Changes the name of the ATM
             this.Text = "ATM" + name;
+
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            //Gets the array of accounts from the bank system
             this.ac = ac;
+            //For loop used to initialise all the array elemts of the ATM GUI
             for (int i = 0; i < 16; i++)
             {
+                //Imports all the images for the keypad when the keys are pressed
                 keysPressed[i] = Image.FromFile(@"keyPadButtons\key" + i + "Pressed.png");
+                //Imports all the images for the keypad when the keys are not pressed
                 keysReleased[i] = Image.FromFile(@"keyPadButtons\key" + i + ".png");
+                //Imports all the images for the cash out animation
                 if (i < 8)
                 {
                     cashOutIMG[i] = Image.FromFile(@"keyPadButtons\cash" + i + ".png");
                 }
+                //Imports all the images for the receipt out animation
                 if (i < 6)
                 {
                     receiptOutIMG[i] = Image.FromFile(@"keyPadButtons\end" + (i + 1) + ".png");
                 }
             }
-
+            //Imports images for pressed keys
             keysPressed[16] = Properties.Resources.screenSideButton0Pressed;
             keysPressed[17] = Properties.Resources.screenSideButton1Pressed;
+            //Imports images for realeased keys 
             keysReleased[16] = Image.FromFile(@"keyPadButtons\screenSideButton0.png");
             keysReleased[17] = Image.FromFile(@"keyPadButtons\screenSideButton1.png");
         }
 
         private void ATM_Load(object sender, EventArgs e)
         {
+            //the horizontal point the starting possition for generating the key pad buttons
             int horizotal = 28;
+            //the vertical point the starting possition for generating the key pad buttons
             int vertical = 271;
+            //the horizontal point the starting possition for generating the screen buttons
             int horizotal2 = 12;
+            //the vertical point the starting possition for generating the screen buttons
             int vertical2 = 110;
+            //Used to keep track of which image needs to be used for a specific button
             int fileNumber = 0;
+            //For loop used to initialised array elements of the GUI
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-
+                    //Gets an image from the array that contains all the button images
                     Image image = keysReleased[fileNumber];
+                    //Initialise the picture box 
                     keyPadButtons[i, j] = new PictureBox();
+                    //Sets the size of the keypad buttons
                     keyPadButtons[i, j].Size = new Size(32, 25);
+                    //Sets the location of the keypad buttons
                     keyPadButtons[i, j].Location = new Point(horizotal, vertical);
+                    //Int variable used to keep track of each keypad button
                     int val = i * 3 + (j + 1);
+                    //calculating the val to know with which button the code is interacting
                     if (j == 3) val = -(val - (i + 1) * 3 + i);
+                    //Resets val
                     if (val == 11) val = 0;
+                    //Initialises the tag class of the picture boxes
                     keyPadButtons[i, j].Tag = new TagInfo { name = "keyPadButton", value = val };
+                    //Sets the background image of the button
                     keyPadButtons[i, j].Image = image;
-
+                    //Calculates the possition of the next button
                     if ((j + 1) % 4 == 0)
                     {
                         vertical += 30;
@@ -94,14 +137,22 @@ namespace Team16Bank
                         if (j == 2) horizotal += 44;
                         else horizotal += 37;
                     }
+                    //Make the button visible
                     keyPadButtons[i, j].Show();
+                    //Add the button to the controler
                     this.Controls.Add(keyPadButtons[i, j]);
+                    //Place the button on top of all the other GUI elements
                     this.Controls.SetChildIndex(keyPadButtons[i, j], 0);
+                    //Add mouse down event for the button to make the interaction with the buttons possible
                     keyPadButtons[i, j].MouseDown += new MouseEventHandler(keypadButtonsDown);
+                    //Add mouse up event for the button to make the interaction with the buttons possible
                     keyPadButtons[i, j].MouseUp += new MouseEventHandler(keypadButtonsUp);
+                    //Increment the image tracker 
                     fileNumber++;
                 }
             }
+            //Stretch the image to fit the picture boxes for some buttons
+            //Adjust the size of the button for some picture boxes
             keyPadButtons[0, 3].SizeMode = PictureBoxSizeMode.StretchImage;
             keyPadButtons[0, 3].Size = new Size(37, 25);
             keyPadButtons[1, 3].SizeMode = PictureBoxSizeMode.StretchImage;
@@ -110,11 +161,12 @@ namespace Team16Bank
             keyPadButtons[2, 3].Size = new Size(37, 25);
             keyPadButtons[3, 3].SizeMode = PictureBoxSizeMode.StretchImage;
             keyPadButtons[3, 3].Size = new Size(37, 25);
-
+            //For loop used to initialise array elements of the GUI
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 2; j++)
                 {
+                    //Changes the horizontal possition of the screen button to make them apper of both sides of the screen
                     if (j == 1)
                     {
                         horizotal2 = 400;
@@ -123,28 +175,41 @@ namespace Team16Bank
                     {
                         horizotal2 = 12;
                     }
+                    //Extract the images for the side screen buttons
                     Image sideButton = Image.FromFile(@"keyPadButtons\screenSideButton" + j + ".png");
+                    //Initialise the picture boxes for the side screen buttons
                     screenButtons[i, j] = new PictureBox();
+                    //Set the size of the side screen buttons
                     screenButtons[i, j].Size = new Size(25, 17);
+                    //Sets the possition of the side screen buttons
                     screenButtons[i, j].Location = new Point(horizotal2, vertical2);
+                    //Initialise the tag for each side screen button
                     screenButtons[i, j].Tag = new TagInfo { name = "screenButton", value = i + j * 3 };
+                    //Sets the backgroung image of the side screen buttons
                     screenButtons[i, j].Image = sideButton;
 
 
-
+                    //Make the side screen buttons visible
                     screenButtons[i, j].Show();
+                    //Add the side screen buttons to the controler
                     this.Controls.Add(screenButtons[i, j]);
+                    //Place the button on top of all the other GUI elements
                     this.Controls.SetChildIndex(screenButtons[i, j], 0);
+                    //Add mouse down event for the button to make the interaction with the buttons possible
                     screenButtons[i, j].MouseDown += new MouseEventHandler(screenButtonsDown);
+                    //Add mouse up event for the button to make the interaction with the buttons possible
                     screenButtons[i, j].MouseUp += new MouseEventHandler(screenButtonsUp);
                 }
+                //Changing the vertical possition of the side screen buttons
                 vertical2 += 42;
             }
         }
-
+        //Event handler for side screen buttons
         private void screenButtonsDown(object sender, EventArgs e)
         {
+            //Creates a variable to hold the clicked button
             PictureBox pb = (PictureBox)sender;
+            //Creates a variable to hold the tag informations of the buttons to make the interaction with the tag easier
             TagInfo TI = (TagInfo)pb.Tag;
             if (TI.value > 2)
             {
@@ -158,9 +223,11 @@ namespace Team16Bank
         }
         private void screenButtonsUp(object sender, EventArgs e)
         {
+            //Creates a variable to hold the clicked button
             PictureBox pb = (PictureBox)sender;
+            //Creates a variable to hold the tag informations of the buttons to make the interaction with the tag easier
             TagInfo TI = (TagInfo)pb.Tag;
-
+            //Changing the image of the button when it is clicked
             if (TI.value > 2)
             {
                 pb.Image = keysReleased[17];
@@ -169,11 +236,15 @@ namespace Team16Bank
             {
                 pb.Image = keysReleased[16];
             }
+            //Checks if the keypad is active
             if (controlsEnabled)
             {
+                //Checks if the user is in the cash out panel
                 if (cashpanel.Visible)
-                {
-                    int cashToTakeAmount = 0;
+                {   
+                    //Variable used to keep track of the value of the cash out request
+                    int cashToTakeAmount = 0;   
+                    //Checks how much money were requested using the keypad
                     switch (TI.value)
                     {
                         case 0:
@@ -191,6 +262,7 @@ namespace Team16Bank
                         case 4:
                             cashToTakeAmount = 50;
                             break;
+                            //Case when the users wants a custome ammount
                         case 5:
                             {
                                 othercashpanel.Visible = true;
@@ -199,10 +271,13 @@ namespace Team16Bank
                             }
 
                     }
+                    //If the values is diffrent then 5, that means that if the user does not click on other the withdraw operation will start
                     if (TI.value != 5)
                     {
+                        //If the user has 
                         if (currentAccount.getBalance() >= cashToTakeAmount)
                         {
+                            //Normal ATM mechanic without any data race or fix
                             if (!isSimulation)
                             {
                                 currentAccount.decrementBalance(cashToTakeAmount);
@@ -214,6 +289,7 @@ namespace Team16Bank
                                 EndCash.Visible = true;
                                 cashpanel.Visible = false;
                             }
+                                //Triggered when simulation without fix is active
                             else if(!isFixed)
                             {
                                 cashpanel.Visible = false;
@@ -223,6 +299,7 @@ namespace Team16Bank
                                 t.Enabled = true;
 
                             }
+                                //Triggered when simulation with semaphore fix is active
                             else
                             {
                                 cashpanel.Visible = false;
@@ -233,12 +310,14 @@ namespace Team16Bank
                             }
 
                         }
+                            //Triggered when the user does not have enough cash
                         else
                         {
                             EndCashBad.Visible = true;
                             cashpanel.Visible = false;
 
                         }
+                        //Return to the initial screen
                         if (!isSimulation)
                         {
                             takemoneypanel.Visible = true;
@@ -249,11 +328,13 @@ namespace Team16Bank
                         }
                     }
                 }
-
+                //Checks if teh main panel is visible/active
                 if (mainpanel.Visible)
                 {
+                    //Checks which screen side button was pressed
                     switch (TI.value)
                     {
+                            //Sets the cash without receipt panel to visible/active
                         case 0:
                             {
 
@@ -262,6 +343,7 @@ namespace Team16Bank
 
                                 break;
                             }
+                            //Sets the balance without receipt panel to visible/active
                         case 1:
                             {
                                 mainpanel.Visible = false;
@@ -269,6 +351,7 @@ namespace Team16Bank
                                 balancelabel.Text = currentAccount.getBalance().ToString();
                                 break;
                             }
+                            //Sets the cash with receipt panel to visible/active
                         case 3:
                             {
                                 receiptNeeded = true;
@@ -277,6 +360,7 @@ namespace Team16Bank
 
                                 break;
                             }
+                            //Sets the balance with receipt panel to visible/active
                         case 4:
                             {
                                 receiptNeeded = true;
@@ -286,6 +370,7 @@ namespace Team16Bank
                                 receiptOutAnimation();
                                 break;
                             }
+                            //Sets pin panel to visible/active
                         case 5:
                             {
                                 mainpanel.Visible = false;
@@ -296,10 +381,12 @@ namespace Team16Bank
 
                     }
                 }
+                    //Checks if the show balance panel is visible
                 else if (balancepanel.Visible)
                 {
                     switch (TI.value)
                     {
+                        //Case when users presses yes when he is asked is he wants to do another operation
                         case 4:
                             {
 
@@ -308,6 +395,7 @@ namespace Team16Bank
                                 receiptNeeded = false;
                                 break;
                             }
+                            //Case when users is pressing NO when he is asked if he want to do an other operation 
                         case 5:
                             {
                                 balancepanel.Visible = false;
@@ -324,21 +412,25 @@ namespace Team16Bank
         }
 
       
-
+        //Method used to how the data race and the fix using semaphores
         private void sleepTest(object sender, EventArgs e, int cashToTakeAmount)
         {
+            //Checks if this is the first call of the method
             if (!simulating)
             {
+                //Checks if this is the first call of the method
                 if (!currentAccount.simulationStarted)
                 {
                     currentAccount.simulationStarted = true;
                     simulating = true;
                 }
+                //Waits for the 2nd ATM
                 else
                 {
                     currentAccount.simulationStarted = false;
                 }
             }
+            //If both ATM reached the withdraw operation it will trigger the code and it will show the data race without fix and with the fix depand son which simulation is selected
             if (!currentAccount.simulationStarted)
             {
                 ((System.Timers.Timer)sender).Enabled = false;
@@ -383,16 +475,18 @@ namespace Team16Bank
             
             
         }
-
+        //Method handeling the press event on a keypad button
         private void keypadButtonsDown(object sender, EventArgs e)
         {
+            //Creates a variable to hold the clicked button
             PictureBox pb = (PictureBox)sender;
+            //Creates a variable to hold the tag informations of the buttons to make the interaction with the tag easier
             TagInfo TI = (TagInfo)pb.Tag;
             int val = getImageNumber(TI.value);
             pb.Image = keysPressed[val];
             if (controlsEnabled)
             {
-
+                //Checks if the user pressed the cancel button tp return to the login in panel
                 if (TI.value == -1 && !loginpanel.Visible)
                 {
                     pinpanel.Visible = false;
@@ -404,20 +498,24 @@ namespace Team16Bank
                 }
                 else if (currentpinpanel.Visible && retriesRemaining > 0)
                 {
+                    //Checks if the user pressed a numerical key
                     if (TI.value >= 0 && TI.value <= 9)
                     {
                         pinEntered += TI.value.ToString();
                         currentpinlabel.Text += "*";
 
                     }
+                    //Checks if the user pressed the clear button to remove a character from the pin
                     if (TI.value == -2)
                     {
                         currentpinlabel.Text = currentpinlabel.Text.Substring(0, currentpinlabel.Text.Length - 1);
                         pinEntered = pinEntered.Substring(0, pinEntered.Length - 1);
 
                     }
+                    //Checks if a full pin was entered
                     if (currentpinlabel.Text == "****")
                     {
+                        //Checks if the pin is correct
                         if (currentAccount.checkPin(Int32.Parse(pinEntered)))
                         {
                             System.Timers.Timer timer = new System.Timers.Timer(500);
@@ -426,6 +524,7 @@ namespace Team16Bank
 
 
                         }
+                            //Triggers when the pin entered is incorrect
                         else
                         {
                             retriesRemaining--;
@@ -434,6 +533,7 @@ namespace Team16Bank
                             errorpinlabel.Visible = true;
                             if (retriesRemaining > 0)
                                 errorpinlabel.Text = "INCORRECT! (" + retriesRemaining + " RETRIES REMAINING)";
+                                //Triggers when the pin entered is incorrect and the user used all his tries
                             else
                             {
                                 errorpinlabel.Text = "INCORRECT! CARD EJECTED!";
@@ -447,20 +547,24 @@ namespace Team16Bank
                     }
 
                 }
+                    //Checks if the confirm pin panel of the change pin operation is visible
                 else if (newpinpanel.Visible)
                 {
+                    //Checks if the user pressed a numerical key
                     if (TI.value >= 0 && TI.value <= 9)
                     {
                         pinEntered += TI.value.ToString();
                         newpinlabel.Text += "*";
 
                     }
+                    //Checks if the user pressed the clear button to remove a character from the pin
                     if (TI.value == -2)
                     {
                         newpinlabel.Text = newpinlabel.Text.Substring(0, newpinlabel.Text.Length - 1);
                         pinEntered = pinEntered.Substring(0, pinEntered.Length - 1);
 
                     }
+                    //Checks if a full pin was entered
                     if (newpinlabel.Text == "****")
                     {
                         currentAccount.setPin(Int32.Parse(pinEntered));
@@ -472,15 +576,19 @@ namespace Team16Bank
                     }
 
                 }
+                    //Checks if the other option of the cash panel is active/visible
                 else if (othercashpanel.Visible)
                 {
+                    //Checks if the key pad key pressed is enter
                     if (TI.value == -3)
                     {
+                        //Checks if there was a value entered in the other cash operation
                         if (cashamountlabel.Text != "")
                         {
+                            //Checks if the users has enough money is his back account
                             if (currentAccount.getBalance() >= Int32.Parse(cashamountlabel.Text))
                             {
-                                
+                                //Normal ATM withdraw(with out a data race)
                                 if (!isSimulation)
                                 {
                                     currentAccount.decrementBalance(Int32.Parse(cashamountlabel.Text));
@@ -512,13 +620,16 @@ namespace Team16Bank
                                 
 
                             }
+                                //TRiggers when the users does not have enough money
                             else
                             {
                                 EndCashBad.Visible = true;
                                 othercashpanel.Visible = false;
                             }
+                            //Return to the initial panel
                             if (!isSimulation)
                             {
+                                Console.WriteLine("MortiMati");
                                 takemoneypanel.Visible = true;
                                 othercashpanel.Visible = false;
                                 System.Timers.Timer timer1 = new System.Timers.Timer(2500);
@@ -540,20 +651,24 @@ namespace Team16Bank
                 }
                 else if (pinpanel.Visible == true && retriesRemaining > 0)
                 {
+                    //Checks if a full pin was not entered and if the user is still pressing numerical keys the triggered code will add the key to the pin string
                     if (pinlabel.Text != "****" && TI.value >= 0 && TI.value <= 9)
                     {
 
                         pinlabel.Text += "*";
                         pinEntered += TI.value.ToString();
                     }
+                    //Checks if the user pressed the clear button to remove a charater from the pin
                     if (TI.value == -2)
                     {
                         pinlabel.Text = pinlabel.Text.Substring(0, pinlabel.Text.Length - 1);
                         pinEntered = pinEntered.Substring(0, pinEntered.Length - 1);
 
                     }
+                    //Checks if a full pin was entered
                     if (pinlabel.Text == "****")
                     {
+                        //Checks if the pin is correct and it it is then the triggered code will give the user acces to the acount
                         if (currentAccount.checkPin(Int32.Parse(pinEntered)))
                         {
 
@@ -563,6 +678,7 @@ namespace Team16Bank
                             controlsEnabled = false;
                             bank.logInfo(this.Text + ": Successful login for account: " + accnumber.Text);
                         }
+                            //Triggered when the pin is incorrect
                         else
                         {
                             retriesRemaining--;
@@ -571,6 +687,7 @@ namespace Team16Bank
                             errorlabel.Visible = true;
                             if (retriesRemaining > 0)
                                 errorlabel.Text = "INCORRECT! (" + retriesRemaining + " RETRIES REMAINING)";
+                                //Triggered when the pin is incorrect and the user used his last try
                             else
                             {
                                 errorlabel.Text = "INCORRECT! CARD EJECTED!";
@@ -587,6 +704,7 @@ namespace Team16Bank
                 }
             }
         }
+        //Method used to display the main screen
         private void showMainScreen(object sender, EventArgs e)
         {
 
@@ -683,12 +801,14 @@ namespace Team16Bank
         }
         private void keypadButtonsUp(object sender, EventArgs e)
         {
+            //Creates a variable to hold the clicked button
             PictureBox pb = (PictureBox)sender;
+            //Creates a variable to hold the tag informations of the buttons to make the interaction with the tag easier
             TagInfo TI = (TagInfo)pb.Tag;
             int val = getImageNumber(TI.value);
             pb.Image = keysReleased[val];
         }
-
+        //Method used for triggering the pull cash animation
         private void cashInAnimation()
         {
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
@@ -700,7 +820,7 @@ namespace Team16Bank
         }
 
 
-
+        //This method is cycling through the animation images to create the animation
         private void cashAnimationRevers(object sender, System.EventArgs e)
         {
             var timer = (System.Windows.Forms.Timer)sender;
@@ -714,7 +834,7 @@ namespace Team16Bank
                 cashNumberRevers = 6;
             }
         }
-
+        //Method used for triggering the cash out animation
         private void cashOutAnimation()
         {
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
@@ -725,7 +845,7 @@ namespace Team16Bank
 
         }
 
-
+        //Method used for triggering the receipt out animation
         private void receiptOutAnimation()
         {
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
@@ -736,7 +856,7 @@ namespace Team16Bank
 
         }
 
-
+        //This method is cycling through the animation images to create the animation
         private void cashAnimation(object sender, System.EventArgs e)
         {
             var timer = (System.Windows.Forms.Timer)sender;
@@ -750,6 +870,7 @@ namespace Team16Bank
                 cashNumber = 0;
             }
         }
+        //This method is cycling through the animation images to create the animation
         private void receiptAnimation(object sender, System.EventArgs e)
         {
             var timer = (System.Windows.Forms.Timer)sender;
@@ -763,12 +884,11 @@ namespace Team16Bank
             }
         }
 
-
+        //Method used to detect which button was pressed
         private int getImageNumber(int TIValue)
         {
             int decreaser = 1;
 
-            // I'm subtracting a minus from a minus just for lolz
             if (TIValue >= 4 && TIValue < 7)
             {
                 decreaser = 0;
@@ -804,15 +924,21 @@ namespace Team16Bank
             int val = TIValue - decreaser;
             return val;
         }
-
+        //Method used to handle clickes on the button1
         private void button1_Click(object sender, EventArgs e)
         {
+            //Checks if the text field is empty
             if (accnumber.Text != "")
             {
+                //Try to parse the text field to an int to see if the account number is correct
                 try
                 {
+
                     int input = Int32.Parse(accnumber.Text);
+                    //looks for the account
                     currentAccount = findAccount(input);
+                    //Checks if the account exists
+                    //If it exists the the system will display the login system(pin panel)
                     if (currentAccount != null)
                     {
                         loginpanel.Visible = false;
@@ -821,12 +947,14 @@ namespace Team16Bank
                         button1.Enabled = false;
 
                     }
+                        //Triggered when the account is not in the system
                     else
                     {
                         loginlabel.Text = "The card could not be read ((invalid account number))";
                         accnumber.Text = "";
                     }
                 }
+                    //Triggered if the entered string can not be parsed to an integer
                 catch (Exception ex)
                 {
                     loginlabel.Text = "The card could not be read ((invalid account number))";
@@ -860,7 +988,7 @@ namespace Team16Bank
 
             return null;
         }
-
+        //Method which handels the clicks on pictureBox3(cash withdraw port)
         private void pictureBox3_Click(object sender, EventArgs e)
         {
             if (!moneyTaken) { 
@@ -869,28 +997,28 @@ namespace Team16Bank
                 
             }
         }
-
+        //Method which handels the clicks on pictureBox4
         private void pictureBox4_Click(object sender, EventArgs e)
         {
             pictureBox4.BackgroundImage = Properties.Resources.noend;
 
         }
-
+        //Method which handels the clicks on label43
         private void label43_Click(object sender, EventArgs e)
         {
 
         }
-
+        //Handler for clicking the exit button
         private void ATM_FormClosed(object sender, FormClosedEventArgs e)
         {
-
+            //Turn the ATM off
             bank.turnOffATM();
         }
 
     }
 
 
-
+    //Tag class which contains all the tag elements of a GUI element
     public class TagInfo
     {
         public string name;

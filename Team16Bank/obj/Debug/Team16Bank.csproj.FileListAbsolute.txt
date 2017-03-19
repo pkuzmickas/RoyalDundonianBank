@@ -28,3 +28,13 @@ C:\Users\pauliuskuzmickas\Documents\Visual Studio 2013\Projects\Team16Bank\Team1
 C:\Users\pauliuskuzmickas\Documents\Visual Studio 2013\Projects\Team16Bank\Team16Bank\bin\Debug\Team16Bank.pdb
 C:\Users\pauliuskuzmickas\Documents\Visual Studio 2013\Projects\Team16Bank\Team16Bank\obj\Debug\Team16Bank.exe
 C:\Users\pauliuskuzmickas\Documents\Visual Studio 2013\Projects\Team16Bank\Team16Bank\obj\Debug\Team16Bank.pdb
+U:\RoyalDundonianBank-master\Team16Bank\bin\Debug\Team16Bank.exe.config
+U:\RoyalDundonianBank-master\Team16Bank\obj\Debug\Team16Bank.exe
+U:\RoyalDundonianBank-master\Team16Bank\obj\Debug\Team16Bank.pdb
+U:\RoyalDundonianBank-master\Team16Bank\bin\Debug\Team16Bank.exe
+U:\RoyalDundonianBank-master\Team16Bank\bin\Debug\Team16Bank.pdb
+U:\RoyalDundonianBank-master\Team16Bank\obj\Debug\Team16Bank.csprojResolveAssemblyReference.cache
+U:\RoyalDundonianBank-master\Team16Bank\obj\Debug\Team16Bank.ATM.resources
+U:\RoyalDundonianBank-master\Team16Bank\obj\Debug\Team16Bank.Form1.resources
+U:\RoyalDundonianBank-master\Team16Bank\obj\Debug\Team16Bank.Properties.Resources.resources
+U:\RoyalDundonianBank-master\Team16Bank\obj\Debug\Team16Bank.csproj.GenerateResource.Cache
