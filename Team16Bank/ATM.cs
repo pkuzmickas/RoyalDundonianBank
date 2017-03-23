@@ -294,7 +294,7 @@ namespace Team16Bank
                             {
                                 cashpanel.Visible = false;
                                 badsimulationpanel.Visible = true;
-                                System.Timers.Timer t = new System.Timers.Timer(1500);
+                                System.Timers.Timer t = new System.Timers.Timer(500);
                                 t.Elapsed += (sender1, ev) => sleepTest(sender1, ev, cashToTakeAmount);
                                 t.Enabled = true;
 
@@ -304,7 +304,7 @@ namespace Team16Bank
                             {
                                 cashpanel.Visible = false;
                                 goodsimulationpanel.Visible = true;
-                                System.Timers.Timer t = new System.Timers.Timer(1500);
+                                System.Timers.Timer t = new System.Timers.Timer(500);
                                 t.Elapsed += (sender1, ev) => sleepTest(sender1, ev, cashToTakeAmount);
                                 t.Enabled = true;
                             }
@@ -315,6 +315,9 @@ namespace Team16Bank
                         {
                             EndCashBad.Visible = true;
                             cashpanel.Visible = false;
+                            System.Timers.Timer timer = new System.Timers.Timer(1500);
+                            timer.Elapsed += new System.Timers.ElapsedEventHandler(returnToMainScreen);
+                            timer.Enabled = true;
 
                         }
                         //Return to the initial screen
@@ -435,41 +438,73 @@ namespace Team16Bank
             {
                 ((System.Timers.Timer)sender).Enabled = false;
 
-                if (isFixed) Form1.semaphore.WaitOne();
-
-                int tempBalance = currentAccount.getBalance();
-                Thread.Sleep(500);
-                tempBalance -= cashToTakeAmount;
-                Thread.Sleep(500);
-                currentAccount.setBalance(tempBalance); 
-                simulatingpanel.Invoke(new MethodInvoker(delegate
+                if (isFixed)
                 {
-                    simulatingpanel.Visible = true;
-                    badsimulationpanel.Visible = false;
-                    goodsimulationpanel.Visible = false;
-                    simulating = false;
+                    Form1.semaphore.WaitOne();
                     
-                    Console.WriteLine(this.Text + ": " + currentAccount.getBalance());
-                    
-                    bank.logInfo(this.Text + ": user " + accnumber.Text + " has just withdrawn " + cashToTakeAmount + "$ from their account.");
-                    if (isFixed) bank.logInfo(this.Text + ": user " + accnumber.Text + " new balance: " + currentAccount.getBalance() + "$");
-                    cashOutAnimation();
-                    moneyTaken = false;
-                    if (receiptNeeded) receiptOutAnimation();
-                    System.Timers.Timer timer = new System.Timers.Timer(2500);
-                    timer.Elapsed += new System.Timers.ElapsedEventHandler(showTakeCash);
-                    timer.Enabled = true;
-                    
-                    
-                }));
-                
+                }
+                if (currentAccount.getBalance() < cashToTakeAmount)
+                {
+                    try
+                    {
+                        EndCashBad.Invoke(new MethodInvoker(delegate
+                        {
 
-                if (isFixed) Form1.semaphore.Release();
+                            EndCashBad.Visible = true;
+                            badsimulationpanel.Visible = false;
+                            goodsimulationpanel.Visible = false;
+                            System.Timers.Timer timer2 = new System.Timers.Timer(1500);
+                            timer2.Elapsed += new System.Timers.ElapsedEventHandler(returnToMainScreen);
+                            timer2.Enabled = true;
+                        }));
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
                 else
                 {
-                    Thread.Sleep(1000);
-                    bank.logInfo(this.Text + ": user " + accnumber.Text + " new balance: " + currentAccount.getBalance() + "$");
+                    int tempBalance = currentAccount.getBalance();
+                    Thread.Sleep(2500);
 
+                    tempBalance -= cashToTakeAmount;
+                    currentAccount.setBalance(tempBalance);
+                    try
+                    {
+                        simulatingpanel.Invoke(new MethodInvoker(delegate
+                        {
+                            simulatingpanel.Visible = true;
+                            badsimulationpanel.Visible = false;
+                            goodsimulationpanel.Visible = false;
+                            simulating = false;
+
+                            Console.WriteLine(this.Text + ": " + currentAccount.getBalance());
+
+                            bank.logInfo(this.Text + ": user " + accnumber.Text + " has just withdrawn " + cashToTakeAmount + "$ from their account.");
+                            if (isFixed) bank.logInfo(this.Text + ": user " + accnumber.Text + " new balance: " + currentAccount.getBalance() + "$");
+                            cashOutAnimation();
+                            moneyTaken = false;
+                            if (receiptNeeded) receiptOutAnimation();
+                            System.Timers.Timer timer = new System.Timers.Timer(2500);
+                            timer.Elapsed += new System.Timers.ElapsedEventHandler(showTakeCash);
+                            timer.Enabled = true;
+
+
+                        }));
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
+                    if (isFixed) Form1.semaphore.Release();
+                    else
+                    {
+                        Thread.Sleep(1000);
+                        bank.logInfo(this.Text + ": user " + accnumber.Text + " new balance: " + currentAccount.getBalance() + "$");
+
+                    }
                 }
             }
             
@@ -567,6 +602,7 @@ namespace Team16Bank
                     //Checks if a full pin was entered
                     if (newpinlabel.Text == "****")
                     {
+                        controlsEnabled = false;
                         currentAccount.setPin(Int32.Parse(pinEntered));
                         successlabel.Visible = true;
                         System.Timers.Timer timer = new System.Timers.Timer(1500);
@@ -604,7 +640,7 @@ namespace Team16Bank
                                 {
                                     othercashpanel.Visible = false;
                                     badsimulationpanel.Visible = true;
-                                    System.Timers.Timer t = new System.Timers.Timer(1500);
+                                    System.Timers.Timer t = new System.Timers.Timer(500);
                                     t.Elapsed += (sender1, ev) => sleepTest(sender1, ev, Int32.Parse(cashamountlabel.Text));
                                     t.Enabled = true;
 
@@ -613,7 +649,7 @@ namespace Team16Bank
                                 {
                                     othercashpanel.Visible = false;
                                     goodsimulationpanel.Visible = true;
-                                    System.Timers.Timer t = new System.Timers.Timer(1500);
+                                    System.Timers.Timer t = new System.Timers.Timer(500);
                                     t.Elapsed += (sender1, ev) => sleepTest(sender1, ev, Int32.Parse(cashamountlabel.Text));
                                     t.Enabled = true;
                                 }
@@ -625,11 +661,13 @@ namespace Team16Bank
                             {
                                 EndCashBad.Visible = true;
                                 othercashpanel.Visible = false;
+                                System.Timers.Timer timer1 = new System.Timers.Timer(1500);
+                                timer1.Elapsed += new System.Timers.ElapsedEventHandler(returnToMainScreen);
+                                timer1.Enabled = true;
                             }
                             //Return to the initial panel
                             if (!isSimulation)
                             {
-                                Console.WriteLine("MortiMati");
                                 takemoneypanel.Visible = true;
                                 othercashpanel.Visible = false;
                                 System.Timers.Timer timer1 = new System.Timers.Timer(2500);
@@ -722,17 +760,24 @@ namespace Team16Bank
         }
         private void showTakeCash(object sender, EventArgs e)
         {
-            takemoneypanel.Invoke(new MethodInvoker(delegate
+            try
             {
-                takemoneypanel.Visible = true;
-                EndCash.Visible = false;
-                goodsimulationpanel.Visible = false;
-                badsimulationpanel.Visible = false;
-                simulatingpanel.Visible = false;
-                System.Timers.Timer timer = new System.Timers.Timer(3000);
-                timer.Elapsed += new System.Timers.ElapsedEventHandler(returnToMainScreen);
-                timer.Enabled = true;
-            }));
+                takemoneypanel.Invoke(new MethodInvoker(delegate
+                {
+                    takemoneypanel.Visible = true;
+                    EndCash.Visible = false;
+                    goodsimulationpanel.Visible = false;
+                    badsimulationpanel.Visible = false;
+                    simulatingpanel.Visible = false;
+                    System.Timers.Timer timer = new System.Timers.Timer(3000);
+                    timer.Elapsed += new System.Timers.ElapsedEventHandler(returnToMainScreen);
+                    timer.Enabled = true;
+                }));
+            }
+            catch (Exception ex)
+            {
+
+            }
             ((System.Timers.Timer)sender).Enabled = false;
         }
         private void showNewPinScreen(object sender, EventArgs e)
@@ -776,6 +821,7 @@ namespace Team16Bank
                     errorpinlabel.Visible = false;
                     successlabel.Visible = false;
                     simulatingpanel.Visible = false;
+                    
                     bank.logInfo(this.Text + ": user " + accnumber.Text + " has just ended their session.");
                     cashamountlabel.Text = "";
                     newpinlabel.Text = "";

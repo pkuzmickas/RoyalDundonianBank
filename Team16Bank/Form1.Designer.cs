@@ -105,6 +105,7 @@
             this.log.Multiline = true;
             this.log.Name = "log";
             this.log.ReadOnly = true;
+            this.log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.log.Size = new System.Drawing.Size(257, 241);
             this.log.TabIndex = 10;
             this.log.Text = "Listening for events...";
